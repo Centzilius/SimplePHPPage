@@ -16,5 +16,13 @@ if (isset($_GET['page'])) {
 	$page = "index";
 }
 
-include("pages/" . $page . ".php");
+// Check for malicious input data (like directory traversal)
+if (!preg_match("~^[a-z0-9]+$~", $page)) $page="error";
+
+$filename = "pages/" . $page . ".php";
+
+// redirect to 404 page
+if (!file_exists($filename)) $filename = "pages/error.php";
+
+include($filename);
 ?>
